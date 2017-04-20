@@ -1,13 +1,18 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     defaultConfig {
         applicationId "com.example.android.sunshine.app"
         minSdkVersion 10
-        targetSdkVersion 21
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
     }
@@ -22,7 +27,29 @@ android {
     }
 }
 
+def supportLibraryVersion = '25.3.1'
+def okhttpVersion = '3.7.0'
+def moshiVersion = '1.4.0'
+def jodaTimeVersion = '2.9.9'
+def flexboxVersion = '0.2.6'
+def constraintLayoutVersion = '1.0.2'
+def picassoVersion = '2.5.2'
+def timberVersion = '4.5.1'
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:21.0.2'
+    //UI
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compile "com.google.android:flexbox:$flexboxVersion"
+    compile "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
+    compile "com.squareup.picasso:picasso:$picassoVersion"
+
+    //NETWORK
+    compile "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    compile "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+
+    //UTIL
+    compile group: 'joda-time', name: 'joda-time', version: "$jodaTimeVersion"
+    compile "com.squareup.moshi:moshi:$moshiVersion"
+    compile "com.jakewharton.timber:timber:$timberVersion"
 }
