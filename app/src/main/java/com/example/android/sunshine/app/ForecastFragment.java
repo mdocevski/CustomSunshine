@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -40,6 +43,9 @@ public class ForecastFragment extends Fragment {
         super.onCreate(savedInstanceState);
         okHttpClient = ((SunshineApplication) getActivity().getApplication()).getOkHttpClient();
         moshi = ((SunshineApplication) getActivity().getApplication()).getMoshi();
+
+        // Inform the Activity that we have menu items to add
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -75,6 +81,7 @@ public class ForecastFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
 
+        // Request url to get the weather data for Skopje
         String getWeatherDataUrl =
                 "http://api.openweathermap.org/data/2.5/forecast/daily?zip=1000,mk&units=metric&mode=json&cnt=7"
                         + "&appId=" + BuildConfig.OPEN_WEATHER_MAP_API_KEY;
@@ -96,7 +103,24 @@ public class ForecastFragment extends Fragment {
                     }
                 });
 
-
         return rootView;
     }
+
+    //region Menu
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.forecastfragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh: {
+                Timber.d("Refresh button clicked.");
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    //endregion
 }
