@@ -22,7 +22,6 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 import timber.log.Timber;
 
@@ -34,15 +33,19 @@ public class ForecastFragment extends Fragment {
     private Moshi moshi;
 
     ArrayAdapter<String> mForecastAdapter;
+    private ForecastFetcher forecastFetcher;
 
     public ForecastFragment() {
     }
+
+    //region Lifecycle
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         okHttpClient = ((SunshineApplication) getActivity().getApplication()).getOkHttpClient();
         moshi = ((SunshineApplication) getActivity().getApplication()).getMoshi();
+        forecastFetcher = new ForecastFetcher(okHttpClient, moshi, "metric", "json");
 
         // Inform the Activity that we have menu items to add
         setHasOptionsMenu(true);
@@ -62,7 +65,7 @@ public class ForecastFragment extends Fragment {
                 "Sat 6/28 - TRAPPED IN WEATHERSTATION - 23/18",
                 "Sun 6/29 - Sunny - 20/7"
         };
-        List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
+        List<String> weekForecast = new ArrayList<>(Arrays.asList(data));
 
 
         // Now that we have some dummy forecast data, create an ArrayAdapter.
@@ -81,30 +84,13 @@ public class ForecastFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
 
-        // Request url to get the weather data for Skopje
-        String getWeatherDataUrl =
-                "http://api.openweathermap.org/data/2.5/forecast/daily?zip=1000,mk&units=metric&mode=json&cnt=7"
-                        + "&appId=" + BuildConfig.OPEN_WEATHER_MAP_API_KEY;
-        okHttpClient.newCall(
-                new Request.Builder()
-                        .get()
-                        .url(getWeatherDataUrl)
-                        .build())
-                .enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Timber.e(e, "Failed to acquire weather data.");
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-//                            moshi.
-                        Timber.d(response.body().string());
-                    }
-                });
+        // Update the forecast
+        fetchForecast();
 
         return rootView;
     }
+
+    //endregion
 
     //region Menu
     @Override
@@ -117,10 +103,29 @@ public class ForecastFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_refresh: {
                 Timber.d("Refresh button clicked.");
-                break;
+                //Update the forecast
+                fetchForecast();
+                return true;
             }
         }
         return super.onOptionsItemSelected(item);
     }
     //endregion
+
+    /***
+     * Fetches 7 days forecast for Skopje.
+     */
+    private void fetchForecast() {
+        forecastFetcher.fetchDailyWeatherForecast("1000", "mk", 7, new Callback() {
+            public void onFailure(Call call, IOException e) {
+                Timber.e(e, "Failed to acquire weather data.");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+//                            moshi.
+                Timber.d(response.body().string());
+            }
+        });
+    }
 }
