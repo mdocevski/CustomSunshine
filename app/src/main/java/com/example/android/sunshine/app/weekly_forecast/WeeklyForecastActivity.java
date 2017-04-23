@@ -13,26 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.weekly_forecast;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.sunshine.app.R;
+import com.example.android.sunshine.app.SunshineApplication;
+import com.example.android.sunshine.app.detail_forecast.DetailForecastActivity;
+
 import okhttp3.OkHttpClient;
 
-public class MainActivity extends ActionBarActivity {
+public class WeeklyForecastActivity extends AppCompatActivity {
 
     private OkHttpClient okHttpClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.weekly_forecast_activity);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ForecastFragment())
+                    .add(R.id.container, new WeeklyForecastFragment())
                     .commit();
         }
         okHttpClient = ((SunshineApplication) getApplication()).getOkHttpClient();
@@ -42,7 +47,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.weekly_forecast_activity_menu, menu);
         return true;
     }
 
@@ -61,4 +66,12 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void launchDetailActivity(String item) {
+        Intent launchDetailForecastActivity = new Intent(this, DetailForecastActivity.class);
+
+        // ADD THE DAY'S INFORMATION TO THE INTENT
+        launchDetailForecastActivity.putExtra(Intent.EXTRA_TEXT, item);
+
+        startActivity(launchDetailForecastActivity);
+    }
 }

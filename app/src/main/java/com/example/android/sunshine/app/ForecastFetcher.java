@@ -24,7 +24,7 @@ import static com.example.android.sunshine.app.util.StringUtils.isNullOrEmpty;
 /***
  * Used to fetch weather from openWeather api. Requires API Keys for api.openweathermap.org to be present in the BuildConfig.
  */
-class ForecastFetcher {
+public class ForecastFetcher {
     private static final String UNITS_PARAMETER = "units";
     private static final String COUNT_PARAMETER = "count";
     private static final String MODE_PARAMETER = "mode";

@@ -15,6 +15,7 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -52,4 +53,7 @@ dependencies {
     compile group: 'joda-time', name: 'joda-time', version: "$jodaTimeVersion"
     compile "com.squareup.moshi:moshi:$moshiVersion"
     compile "com.jakewharton.timber:timber:$timberVersion"
+    compile "com.android.support:support-v4:$supportLibraryVersion"
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:support-vector-drawable:25.3.1'
 }
