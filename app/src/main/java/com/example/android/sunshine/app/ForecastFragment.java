@@ -14,15 +14,11 @@ import android.widget.ListView;
 
 import com.squareup.moshi.Moshi;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
-import okhttp3.Response;
 import timber.log.Timber;
 
 /**
@@ -32,7 +28,7 @@ public class ForecastFragment extends Fragment {
     private OkHttpClient okHttpClient;
     private Moshi moshi;
 
-    ArrayAdapter<String> mForecastAdapter;
+    ArrayAdapter<String> forecastAdapter;
     private ForecastFetcher forecastFetcher;
 
     public ForecastFragment() {
@@ -71,7 +67,7 @@ public class ForecastFragment extends Fragment {
         // Now that we have some dummy forecast data, create an ArrayAdapter.
         // The ArrayAdapter will take data from a source (like our dummy forecast) and
         // use it to populate the ListView it's attached to.
-        mForecastAdapter =
+        forecastAdapter =
                 new ArrayAdapter<>(
                         getActivity(), // The current context (this activity)
                         R.layout.list_item_forecast, // The name of the layout ID.
@@ -82,7 +78,7 @@ public class ForecastFragment extends Fragment {
 
         // Get a reference to the ListView, and attach this adapter to it.
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
-        listView.setAdapter(mForecastAdapter);
+        listView.setAdapter(forecastAdapter);
 
         // Update the forecast
         fetchForecast();
@@ -116,16 +112,14 @@ public class ForecastFragment extends Fragment {
      * Fetches 7 days forecast for Skopje.
      */
     private void fetchForecast() {
-        forecastFetcher.fetchDailyWeatherForecast("1000", "mk", 7, new Callback() {
-            public void onFailure(Call call, IOException e) {
-                Timber.e(e, "Failed to acquire weather data.");
+        forecastFetcher.fetchDailyWeatherForecast("1000", "mk", 7, daysForecasts -> {
+            if(getActivity()!=null) {
+                getActivity().runOnUiThread(() -> {
+                    forecastAdapter.clear();
+                    forecastAdapter.addAll(daysForecasts);
+                    forecastAdapter.notifyDataSetChanged();
+                });
             }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-//                            moshi.
-                Timber.d(response.body().string());
-            }
-        });
+        }, Timber::e);
     }
 }

@@ -3,6 +3,7 @@ package com.example.android.sunshine.app;
 import android.app.Application;
 import android.util.Log;
 
+import com.example.android.sunshine.app.data.OpenWeatherDateTimeAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.picasso.Picasso;
 
@@ -27,6 +28,7 @@ public class SunshineApplication extends Application {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
         moshi = new Moshi.Builder()
                 // add the converter factories here
+                .add(new OpenWeatherDateTimeAdapter())
                 .build();
         okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
