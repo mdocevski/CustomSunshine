@@ -10,6 +10,7 @@ Learned how to use:
  - okhttp
  - moshi
  - joda-time
+ - timber
 
 
 
