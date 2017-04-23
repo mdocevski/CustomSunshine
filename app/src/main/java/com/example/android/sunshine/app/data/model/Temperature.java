@@ -1,5 +1,7 @@
 package com.example.android.sunshine.app.data.model;
 
+import com.squareup.moshi.Json;
+
 /**
  * Created by mdocevski on 23.4.17.
  */
@@ -9,16 +11,16 @@ public class Temperature {
     public final double min;
     public final double max;
     public final double night;
-    public final double eve;
-    public final double morn;
+    @Json(name = "eve") public final double evening;
+    @Json(name = "morn") public final double morning;
 
-    public Temperature(double day, double min, double max, double night, double eve, double morn) {
+    public Temperature(double day, double min, double max, double night, double evening, double morning) {
         this.day = day;
         this.min = min;
         this.max = max;
         this.night = night;
-        this.eve = eve;
-        this.morn = morn;
+        this.evening = evening;
+        this.morning = morning;
     }
 
     @Override
@@ -32,8 +34,8 @@ public class Temperature {
         if (Double.compare(that.min, min) != 0) return false;
         if (Double.compare(that.max, max) != 0) return false;
         if (Double.compare(that.night, night) != 0) return false;
-        if (Double.compare(that.eve, eve) != 0) return false;
-        return Double.compare(that.morn, morn) == 0;
+        if (Double.compare(that.evening, evening) != 0) return false;
+        return Double.compare(that.morning, morning) == 0;
 
     }
 
@@ -49,9 +51,9 @@ public class Temperature {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(night);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(eve);
+        temp = Double.doubleToLongBits(evening);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(morn);
+        temp = Double.doubleToLongBits(morning);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }

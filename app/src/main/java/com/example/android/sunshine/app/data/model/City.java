@@ -1,5 +1,7 @@
 package com.example.android.sunshine.app.data.model;
 
+import com.squareup.moshi.Json;
+
 /**
  * Created by mdocevski on 23.4.17.
  */
@@ -7,14 +9,14 @@ package com.example.android.sunshine.app.data.model;
 public class City {
     public final int id;
     public final String name;
-    public final Coordinate coord;
+    @Json(name="coord") public final Coordinate coordinate;
     public final String country;
     public final long population;
 
-    public City(int id, String name, Coordinate coord, String country, long population) {
+    public City(int id, String name, Coordinate coordinate, String country, long population) {
         this.id = id;
         this.name = name;
-        this.coord = coord;
+        this.coordinate = coordinate;
         this.country = country;
         this.population = population;
     }
@@ -29,7 +31,7 @@ public class City {
         if (id != city.id) return false;
         if (population != city.population) return false;
         if (name != null ? !name.equals(city.name) : city.name != null) return false;
-        if (coord != null ? !coord.equals(city.coord) : city.coord != null) return false;
+        if (coordinate != null ? !coordinate.equals(city.coordinate) : city.coordinate != null) return false;
         return country != null ? country.equals(city.country) : city.country == null;
 
     }
@@ -38,7 +40,7 @@ public class City {
     public int hashCode() {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (coord != null ? coord.hashCode() : 0);
+        result = 31 * result + (coordinate != null ? coordinate.hashCode() : 0);
         result = 31 * result + (country != null ? country.hashCode() : 0);
         result = 31 * result + (int) (population ^ (population >>> 32));
         return result;

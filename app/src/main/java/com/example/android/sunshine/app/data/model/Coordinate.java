@@ -1,16 +1,18 @@
 package com.example.android.sunshine.app.data.model;
 
+import com.squareup.moshi.Json;
+
 /**
  * Created by mdocevski on 23.4.17.
  */
 
 public class Coordinate {
-    public final double lon;
-    public final double lat;
+    @Json(name="lon") public final double longitude;
+    @Json(name="lat") public final double latitude;
 
-    public Coordinate(double lon, double lat) {
-        this.lon = lon;
-        this.lat = lat;
+    public Coordinate(double longitude, double latitude) {
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     @Override
@@ -20,8 +22,8 @@ public class Coordinate {
 
         Coordinate coordinate = (Coordinate) o;
 
-        if (Double.compare(coordinate.lon, lon) != 0) return false;
-        return Double.compare(coordinate.lat, lat) == 0;
+        if (Double.compare(coordinate.longitude, longitude) != 0) return false;
+        return Double.compare(coordinate.latitude, latitude) == 0;
 
     }
 
@@ -29,9 +31,9 @@ public class Coordinate {
     public int hashCode() {
         int result;
         long temp;
-        temp = Double.doubleToLongBits(lon);
+        temp = Double.doubleToLongBits(longitude);
         result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(lat);
+        temp = Double.doubleToLongBits(latitude);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }

@@ -26,7 +26,7 @@ import static com.example.android.sunshine.app.util.StringUtils.isNullOrEmpty;
  */
 class ForecastFetcher {
     private static final String UNITS_PARAMETER = "units";
-    private static final String COUNT_PARAMETER = "cnt";
+    private static final String COUNT_PARAMETER = "count";
     private static final String MODE_PARAMETER = "mode";
     private static final String APP_ID = "appId";
     private OkHttpClient okHttpClient;
@@ -126,9 +126,9 @@ class ForecastFetcher {
             String description;
             String highAndLow;
 
-            day = getReadableDateString(forecastItem.dt);
-            description = forecastItem.weather.get(0).description;
-            highAndLow = formatHighLows(forecastItem.temp.max, forecastItem.temp.min);
+            day = getReadableDateString(forecastItem.dateTime);
+            description = forecastItem.weather.get(0).main;
+            highAndLow = formatHighLows(forecastItem.temperature.max, forecastItem.temperature.min);
 
             resultStrs[i] = day + " - " + description + " - " + highAndLow;
             i++;
